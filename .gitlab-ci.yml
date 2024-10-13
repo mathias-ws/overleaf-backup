@@ -10,6 +10,7 @@ include:
 
 semantic-release:
   stage: release
+  image: node:22-bookworm-slim
   before_script:
     - >
       echo "module.exports = {
@@ -26,6 +27,7 @@ semantic-release:
           ],
         ],
       };" > release.config.js
+    - apt-get update && apt-get install -y python3 python3-pip git
     - npm install -g semantic-release @semantic-release/gitlab @semantic-release/exec
   script:
     - cat release.config.js
