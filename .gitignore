@@ -144,4 +144,5 @@ dmypy.json
 
 src/config.yaml
 config.yaml
-
+clone_folder/
+*.html

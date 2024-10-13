@@ -1,0 +1,58 @@
+---
+stages:
+  - test
+  - release
+
+sast:
+  stage: test
+include:
+  - template: Security/SAST.gitlab-ci.yml
+
+semantic-release:
+  stage: release
+  before_script:
+    - >
+      echo "module.exports = {
+        branches: ['main', 'master'],
+        plugins: [
+          '@semantic-release/commit-analyzer',
+          '@semantic-release/release-notes-generator',
+          '@semantic-release/gitlab',
+          [
+            '@semantic-release/exec',
+            {
+              'prepareCmd': 'echo \${nextRelease.version} > VERSION',
+            },
+          ],
+        ],
+      };" > release.config.js
+    - npm install -g semantic-release @semantic-release/gitlab @semantic-release/exec
+  script:
+    - cat release.config.js
+    - semantic-release
+  artifacts:
+    paths:
+      - VERSION
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
+
+build:
+  stage: release
+  needs: ["semantic-release"]
+  image:
+    name: gcr.io/kaniko-project/executor:v1.20.1-debug
+    entrypoint: [""]
+  before_script:
+    - export VERSION=$(cat VERSION)
+    - if ! test -f VERSION; then echo "No new release needed"; exit 0; fi
+    - echo "Building version ${VERSION}"
+  script:
+    - mkdir -p /kaniko/.docker
+    - echo "{\"auths\":{\"https://index.docker.io/v1/\":{\"auth\":\"$(echo -n ${REGISTRY_USERNAME}:${REGISTRY_PASSWORD} | base64)\"}}}" > /kaniko/.docker/config.json
+    - /kaniko/executor
+      --context "${CI_PROJECT_DIR}"
+      --dockerfile "${CI_PROJECT_DIR}/Dockerfile"
+      --destination "mathiasws/overleaf-backup:${VERSION}"
+      --force
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
