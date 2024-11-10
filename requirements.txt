@@ -1,7 +1,7 @@
 pydantic==2.9.2
 pydantic-settings==2.5.2
 regex==2024.11.6
-python-gitlab==4.10.0
+python-gitlab==4.13.0
 requests==2.32.3
 selenium==4.26.1
 beautifulsoup4==4.12.3
