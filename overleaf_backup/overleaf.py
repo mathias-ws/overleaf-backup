@@ -2,9 +2,10 @@ import json
 import logging
 import time
 
+import undetected_chromedriver as webdriver
 from bs4 import BeautifulSoup
-from selenium import webdriver
 from selenium.webdriver.common.by import By
+from selenium_stealth import stealth
 
 from overleaf_backup.utils.config import OverleafSettings
 
@@ -19,8 +20,21 @@ class Overleaf:
         options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
+        options.add_argument("--use_subprocess")
 
-        return webdriver.Chrome(options=options)
+        driver = webdriver.Chrome(options=options)
+        stealth(
+            driver,
+            user_agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36",
+            languages=["en-US", "en"],
+            vendor="Google Inc.",
+            platform="Win32",
+            webgl_vendor="Intel Inc.",
+            renderer="Intel Iris OpenGL Engine",
+            fix_hairline=True,
+        )
+
+        return driver
 
     def overleaf_sign_in(self):
         logging.info("Attempting to log into overleaf")
