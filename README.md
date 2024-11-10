@@ -69,7 +69,7 @@ All configurations for this script is done through environment variables.
 | GITLAB_USERNAME     | GitLab username.                                                                  | Yes      | NA                           |
 | GITLAB_ACCESS_TOKEN | Access token to GitLab, must have `api` rights.                                   | Yes      | NA                           |
 | GITLAB_GROUP        | Name of GitLab group to use, if not set the default namespace (username) is used. | No       | NA                           |
-| LEVEL               | The logging level.                                                                | No       | info                         |
+| LOGGING_LEVEL       | The logging level.                                                                | No       | info                         |
 
 ## Contribution
 

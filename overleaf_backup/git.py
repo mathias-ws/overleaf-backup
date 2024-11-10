@@ -15,8 +15,8 @@ class GitLab:
         """
         self.__config = config
         self.__gl = gitlab.Gitlab(
-            url=config.gitlab_url,
-            private_token=self.__config.gitlab_access_token.get_secret_value(),
+            url=config.url,
+            private_token=self.__config.access_token.get_secret_value(),
         )
         self.__gl.auth()
 
@@ -26,8 +26,8 @@ class GitLab:
             logging.error("Unable to authenticate with GitLab")
             raise gitlab.GitlabAuthenticationError("unable to authenticate with GitLab")
 
-        if self.__config.gitlab_group:
-            self.__group_id = self.group_exists(self.__config.gitlab_group)
+        if self.__config.group:
+            self.__group_id = self.group_exists(self.__config.group)
         else:
             self.__group_id = None
 
@@ -133,7 +133,7 @@ class GitLab:
         try:
             if self.__group_id:
                 project = self.__gl.projects.get(
-                    f"{self.__config.gitlab_group}/{project_name}"
+                    f"{self.__config.group}/{project_name}"
                 )
             else:
                 default_namespace = self.__gl.user.username
