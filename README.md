@@ -1,7 +1,7 @@
 # overleaf-backup
 
 [![release](https://gitlab.com/mathias_ws/overleaf-backup/-/badges/release.svg?order_by=release_at)](https://gitlab.com/mathias_ws/overleaf-backup/-/releases)
-[![pipeline](https://gitlab.com/mathias_ws/overleaf-backup/-/badges/main/pipeline.svg)](https://gitlab.com/mathias_ws/overleaf-backup/-/pipelines)
+[![pipeline](https://gitlab.com/mathias_ws/overleaf-backup/badges/main/pipeline.svg)](https://gitlab.com/mathias_ws/overleaf-backup/-/pipelines)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](https://gitlab.com/mathias_ws/overleaf-backup/-/blob/main/LICENSE)
 [![docker](https://img.shields.io/docker/pulls/mathiasws/overleaf-backup)](https://hub.docker.com/r/mathiasws/overleaf-backup)
 [![docker](https://img.shields.io/docker/image-size/mathiasws/overleaf-backup)](https://hub.docker.com/r/mathiasws/overleaf-backup)
