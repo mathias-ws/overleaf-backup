@@ -16,9 +16,12 @@ are downloaded to a local directory. If a GitLab repository does not exist for t
 one is automatically created. The GitLab repo is then added as a remote and then a push is done to this remote.
 This creates a backup of all Overleaf projects to GitLab.
 
+Because of compatibility issues with some of the packages used, only Python versions <3.12 is required.
+
 ## Known issues
 
 - Sometimes captcha is required to log in to Overleaf. (This does not seem to be an issue from the NTNU network)
+  - This might be solved by [this merge request](https://gitlab.com/mathias_ws/overleaf-backup/-/merge_requests/10).
 - Some shared projects require some manual interaction before it can be cloned.
 
 ## Installation
