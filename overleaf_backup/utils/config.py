@@ -3,28 +3,28 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class OverleafSettings(BaseSettings):
-    overleaf_url: str = Field("https://www.overleaf.com")
-    overleaf_git_url: str = Field("https://git@git.overleaf.com")
-    overleaf_git_token: SecretStr
-    overleaf_username: str
-    overleaf_password: SecretStr
+    url: str = Field("https://www.overleaf.com")
+    git_url: str = Field("https://git@git.overleaf.com")
+    git_token: SecretStr
+    username: str
+    password: SecretStr
 
-    model_config = SettingsConfigDict(frozen=True, strict=True)
+    model_config = SettingsConfigDict(frozen=True, strict=True, env_prefix="OVERLEAF_")
 
 
 class GitLabSettings(BaseSettings):
-    gitlab_url: str = Field("https://gitlab.com")
-    gitlab_username: str
-    gitlab_access_token: SecretStr
-    gitlab_group: str = Field("")
+    url: str = Field("https://gitlab.com")
+    username: str
+    access_token: SecretStr
+    group: str = Field("")
 
-    model_config = SettingsConfigDict(frozen=True, strict=True)
+    model_config = SettingsConfigDict(frozen=True, strict=True, env_prefix="GITLAB_")
 
 
 class LoggingSettings(BaseSettings):
     level: str = "info"
 
-    model_config = SettingsConfigDict(frozen=True, strict=True)
+    model_config = SettingsConfigDict(frozen=True, strict=True, env_prefix="LOGGING_")
 
 
 class Configuration(BaseSettings):

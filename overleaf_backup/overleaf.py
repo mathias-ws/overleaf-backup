@@ -25,14 +25,14 @@ class Overleaf:
     def overleaf_sign_in(self):
         logging.info("Attempting to log into overleaf")
 
-        self.__driver.get(f"{self.__config.overleaf_url}/login")
+        self.__driver.get(f"{self.__config.url}/login")
 
         time.sleep(1)
 
         username_field = self.__driver.find_element(By.XPATH, '//*[@id="email"]')
         password_field = self.__driver.find_element(By.XPATH, '//*[@id="password"]')
 
-        username_field.send_keys(self.__config.overleaf_username)
+        username_field.send_keys(self.__config.username)
 
         # Must be done to not log the password
         org_log_level = logging.getLogger().getEffectiveLevel()
@@ -42,7 +42,7 @@ class Overleaf:
             )
             logging.getLogger().setLevel(logging.INFO)
 
-        password_field.send_keys(self.__config.overleaf_password.get_secret_value())
+        password_field.send_keys(self.__config.password.get_secret_value())
 
         # Must be done to not log the password
         if org_log_level == logging.DEBUG:

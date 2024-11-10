@@ -30,9 +30,7 @@ class OverleafRepo:
         :param backup_url: The url to the backup repository.
         :param clone_path: The path where the repository will be cloned.
         """
-        self.__overleaf_url = (
-            f"{config.overleaf.overleaf_git_url}/{overleaf_project_id}"
-        )
+        self.__overleaf_url = f"{config.overleaf.git_url}/{overleaf_project_id}"
         self.__overleaf_project_id = overleaf_project_id
         self.__backup_url = backup_url
         logging.debug(
@@ -111,14 +109,14 @@ class OverleafRepo:
         :return: If the command was successful.
         """
         if "clone" in command or "pull" in command:
-            os.environ["GIT_USERNAME"] = self.__config.overleaf.overleaf_username
+            os.environ["GIT_USERNAME"] = self.__config.overleaf.username
             os.environ["GIT_PASSWORD"] = (
-                self.__config.overleaf.overleaf_git_token.get_secret_value()
+                self.__config.overleaf.git_token.get_secret_value()
             )
         else:
-            os.environ["GIT_USERNAME"] = self.__config.gitlab.gitlab_username
+            os.environ["GIT_USERNAME"] = self.__config.gitlab.username
             os.environ["GIT_PASSWORD"] = (
-                self.__config.gitlab.gitlab_access_token.get_secret_value()
+                self.__config.gitlab.access_token.get_secret_value()
             )
 
         os.environ["GIT_ASKPASS"] = "../../assets/git_creds.sh"
