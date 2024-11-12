@@ -1,7 +1,5 @@
 import logging
-from logging import Formatter, StreamHandler
-
-from overleaf_backup.utils.config import LoggingSettings
+from logging import Formatter, StreamHandler, getLogger
 
 
 def __get_log_level(log_level: str) -> int:
@@ -24,9 +22,12 @@ def __get_log_level(log_level: str) -> int:
     else:
         logging.warning(f"{log_level} is not a valid log level, defaulting to info.")
         return logging.INFO
+    
+def set_log_level(log_level: str):
+    getLogger().setLevel(__get_log_level(log_level))
 
 
-def setup_logging(config: LoggingSettings):
+def setup_logging():
     formatter = Formatter(
         fmt="%(asctime)s:%(levelname)s::%(message)s", datefmt="%Y-%m-%d %H:%M:%S"
     )
@@ -34,6 +35,6 @@ def setup_logging(config: LoggingSettings):
     stream_handler.setFormatter(formatter)
 
     logging.basicConfig(
-        level=__get_log_level(config.level),
+        level=logging.INFO,
         handlers=[stream_handler],
     )
