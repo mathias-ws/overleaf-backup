@@ -45,7 +45,12 @@ class OverleafRepo:
         """
         if Path(f"{self.__clone_path}/{self.__overleaf_project_id}").exists():
             if self.__run_git_command(
-                ["git", "pull"], f"{self.__clone_path}/{self.__overleaf_project_id}"
+                [
+                    "git",
+                    "-C",
+                    f"{self.__clone_path}/{self.__overleaf_project_id}",
+                    "pull",
+                ]
             ):
                 logging.info(f"{self.__overleaf_project_id} was successfully pulled.")
             else:
@@ -55,7 +60,7 @@ class OverleafRepo:
 
         # Cloning the repo if it is not already cloned
         if self.__run_git_command(
-            ["git", "clone", self.__overleaf_url], self.__clone_path
+            ["git", "-C", self.__clone_path, "clone", self.__overleaf_url]
         ):
             logging.info(
                 f"Was able to clone {self.__overleaf_url} into {self.__clone_path}"
@@ -72,8 +77,15 @@ class OverleafRepo:
         :param remote_name: The name of the remote.
         """
         if self.__run_git_command(
-            ["git", "remote", "add", remote_name, self.__backup_url],
-            f"{self.__clone_path}/{self.__overleaf_project_id}",
+            [
+                "git",
+                "-C",
+                f"{self.__clone_path}/{self.__overleaf_project_id}",
+                "remote",
+                "add",
+                remote_name,
+                self.__backup_url,
+            ],
         ):
             logging.info(
                 f"Successfully added remote {remote_name} to {self.__overleaf_project_id}."
@@ -90,8 +102,13 @@ class OverleafRepo:
         :param remote_name: The name of the remote
         """
         if self.__run_git_command(
-            ["git", "push", remote_name],
-            f"{self.__clone_path}/{self.__overleaf_project_id}",
+            [
+                "git",
+                "-C",
+                f"{self.__clone_path}/{self.__overleaf_project_id}",
+                "push",
+                remote_name,
+            ],
         ):
             logging.info(
                 f"Successfully pushed {self.__overleaf_project_id} to {remote_name}."
@@ -101,7 +118,7 @@ class OverleafRepo:
                 f"Unable to push {self.__overleaf_project_id} to {remote_name}."
             )
 
-    def __run_git_command(self, command: list, work_dir: str) -> bool:
+    def __run_git_command(self, command: list) -> bool:
         """
         Runs arbritarty git commands and returns True if the command was successful.
 
@@ -126,7 +143,6 @@ class OverleafRepo:
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
             text=True,
-            cwd=work_dir,
         )
 
         if result.returncode == 0:
@@ -165,11 +181,9 @@ def backup(config: Configuration) -> None:
     """
     gitlab_obj = GitLab(config.gitlab)
     overleaf = Overleaf(config.overleaf)
-    # overleaf.overleaf_sign_in()
-    # project_list = overleaf.overleaf_fetch_project_list()
-    # overleaf.close_driver()
-    with open("overleaf_projects.html", "r") as file:
-        project_list = file.read()
+    overleaf.overleaf_sign_in()
+    project_list = overleaf.overleaf_fetch_project_list()
+    overleaf.close_driver()
 
     overleaf_projects = overleaf.parse_project_list(project_list)
 
