@@ -165,9 +165,12 @@ def backup(config: Configuration) -> None:
     """
     gitlab_obj = GitLab(config.gitlab)
     overleaf = Overleaf(config.overleaf)
-    overleaf.overleaf_sign_in()
-    project_list = overleaf.overleaf_fetch_project_list()
-    overleaf.close_driver()
+    # overleaf.overleaf_sign_in()
+    # project_list = overleaf.overleaf_fetch_project_list()
+    # overleaf.close_driver()
+    with open("overleaf_projects.html", "r") as file:
+        project_list = file.read()
+
     overleaf_projects = overleaf.parse_project_list(project_list)
 
     logging.info(f"Found {len(overleaf_projects)} projects in Overleaf")
