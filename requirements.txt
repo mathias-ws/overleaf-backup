@@ -1,5 +1,5 @@
 pydantic==2.9.2
-pydantic-settings==2.6.1
+pydantic-settings==2.7.1
 regex==2024.11.6
 python-gitlab==4.13.0
 requests==2.32.3
