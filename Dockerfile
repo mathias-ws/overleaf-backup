@@ -4,7 +4,6 @@ WORKDIR /app
 
 # Set environment variables to prevent prompts during installations
 ENV DEBIAN_FRONTEND=noninteractive
-ENV DOCKER_RUNTIME=1
 
 RUN apt-get update && apt-get install -y apt-transport-https ca-certificates curl gnupg	git --no-install-recommends \
     && curl -sSL https://dl.google.com/linux/linux_signing_key.pub | apt-key add - \
