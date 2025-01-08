@@ -1,3 +1,3 @@
 #!/bin/bash
-echo $GIT_USERNAME
+[ -n "$GIT_USERNAME" ] && echo "$GIT_USERNAME"
 echo $GIT_PASSWORD

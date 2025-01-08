@@ -60,7 +60,13 @@ class OverleafRepo:
 
         # Cloning the repo if it is not already cloned
         if self.__run_git_command(
-            ["git", "-C", self.__clone_path, "clone", self.__overleaf_url]
+            [
+                "git",
+                "-C",
+                str(self.__clone_path.absolute()),
+                "clone",
+                self.__overleaf_url,
+            ]
         ):
             logging.info(
                 f"Was able to clone {self.__overleaf_url} into {self.__clone_path}"
@@ -126,7 +132,6 @@ class OverleafRepo:
         :return: If the command was successful.
         """
         if "clone" in command or "pull" in command:
-            os.environ["GIT_USERNAME"] = self.__config.overleaf.username
             os.environ["GIT_PASSWORD"] = (
                 self.__config.overleaf.git_token.get_secret_value()
             )
@@ -136,7 +141,10 @@ class OverleafRepo:
                 self.__config.gitlab.access_token.get_secret_value()
             )
 
-        os.environ["GIT_ASKPASS"] = "assets/git_creds.sh"
+        if os.getenv("DOCKER_RUNTIME") == "1":
+            os.environ["GIT_ASKPASS"] = "../assets/git_creds.sh"
+        else:
+            os.environ["GIT_ASKPASS"] = "assets/git_creds.sh"
 
         result = subprocess.run(
             command,
