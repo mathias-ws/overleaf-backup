@@ -136,7 +136,10 @@ class OverleafRepo:
                 self.__config.gitlab.access_token.get_secret_value()
             )
 
-        os.environ["GIT_ASKPASS"] = "../../assets/git_creds.sh"
+        if os.getenv("DOCKER_RUNTIME") == 1:
+            os.environ["GIT_ASKPASS"] = "assets/git_creds.sh"
+        else:
+            os.environ["GIT_ASKPASS"] = "../../assets/git_creds.sh"
 
         result = subprocess.run(
             command,
