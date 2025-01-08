@@ -16,6 +16,10 @@ are downloaded to a local directory. If a GitLab repository does not exist for t
 one is automatically created. The GitLab repo is then added as a remote and then a push is done to this remote.
 This creates a backup of all Overleaf projects to GitLab.
 
+The script can be run in three different modes based on the CLI arguments. The `full` mode runs the complete script. It fetches the project
+list from Overleaf and backs up these. The `fetch` mode fetches the project list from Overleaf and save these to a file. The `backup` mode uses
+the file from the `fetch` mode to take a backup of these.
+
 ## Known issues
 
 - Sometimes captcha is required to log in to Overleaf. (This does not seem to be an issue from the NTNU network)
@@ -54,6 +58,25 @@ pip install -r requirements.txt
 
 `python -m overleaf_backup`
 
+## CLI arguments
+
+The script can run in different modes specified by the CLI arguments.
+
+CLI argument help text:
+
+```text
+usage: overleaf-backup [-h] [-f FILE] {full,backup,fetch}
+
+A program for taking backups of Overleaf projects.
+
+positional arguments:
+  {full,backup,fetch}   Mode to run the program in. Full fetches project list from Overleaf and takes the backup. Backup uses the exported project file from the 'fetch' mode to only take the backup. Fetch downloads the a list of all projects from Overleaf and saves them to a file.
+
+options:
+  -h, --help            show this help message and exit
+  -f FILE, --file FILE  The file to use for backup or fetch modes. Default: 'projects.json'.
+```
+
 ## Configuration
 
 All configurations for this script is done through environment variables.
@@ -64,7 +87,7 @@ All configurations for this script is done through environment variables.
 | OVERLEAF_GIT_URL    | Git url to Overleaf instance.                                                     | No       | https://git@git.overleaf.com |
 | OVERLEAF_USERNAME   | Overleaf username.                                                                | Yes      | NA                           |
 | OVERLEAF_PASSWORD   | Overleaf password.                                                                | Yes      | NA                           |
-| OVERLEAF_GIT_TOKEN  | Git token provided by Overleaf.                                                   | Yes      |                              |
+| OVERLEAF_GIT_TOKEN  | Git token provided by Overleaf.                                                   | Yes      | NA                           |
 | GITLAB_URL          | Url to GitLab instance.                                                           | No       | https://gitlab.com           |
 | GITLAB_USERNAME     | GitLab username.                                                                  | Yes      | NA                           |
 | GITLAB_ACCESS_TOKEN | Access token to GitLab, must have `api` rights.                                   | Yes      | NA                           |

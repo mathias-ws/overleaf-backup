@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+from pathlib import Path
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
@@ -16,7 +17,7 @@ class Overleaf:
 
     def __create_web_driver(self) -> webdriver.Chrome:
         options = webdriver.ChromeOptions()
-        # options.add_argument("--headless")
+        options.add_argument("--headless")
         options.add_argument("--no-sandbox")
         options.add_argument("--disable-dev-shm-usage")
         options.add_argument("--use_subprocess")
@@ -95,3 +96,40 @@ class Overleaf:
     def close_driver(self) -> None:
         self.__driver.close()
         self.__driver.quit()
+
+
+def save_project_list(projects: list, path: str) -> bool:
+    """
+    Save a list of all Overleaf projects as a JSON file.
+
+    :param projects:
+    :param path:
+    :return:
+    """
+    try:
+        with open(path, "w") as file:
+            file.write(json.dumps(projects))
+
+        return True
+    except Exception as e:
+        logging.debug(f"Error writing project list {e}")
+        logging.error("Unable to save the project list to file.")
+        return False
+
+
+def read_project_list(path: str) -> list:
+    """
+    Reads the project list saved on the file system of Overleaf projects to backup.
+
+    :param path: The path of the project list.
+    :return: The project list.
+    """
+    try:
+        with open(path, "r") as file:
+            data = json.loads(file.read())
+
+        return data
+    except Exception as e:
+        logging.debug(f"Error read project list {e}")
+        logging.error("Unable to read the project list from file.")
+        return []

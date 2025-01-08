@@ -175,11 +175,13 @@ def transform_string_unicode(s):
     return s
 
 
-def backup(config: Configuration) -> None:
+def fetch(config: Configuration) -> list:
     """
-    Main function that backs up all Overleaf projects to GitLab.
+    Fetches project list from Overleaf.
+
+    :param config: The program configuration.
+    :return: A list of all Overleaf projects found.
     """
-    gitlab_obj = GitLab(config.gitlab)
     overleaf = Overleaf(config.overleaf)
     overleaf.overleaf_sign_in()
     project_list = overleaf.overleaf_fetch_project_list()
@@ -188,6 +190,18 @@ def backup(config: Configuration) -> None:
     overleaf_projects = overleaf.parse_project_list(project_list)
 
     logging.info(f"Found {len(overleaf_projects)} projects in Overleaf")
+
+    return overleaf_projects
+
+
+def backup(config: Configuration, overleaf_projects: list) -> None:
+    """
+    Signs in to GitLab, downloads git projects from Overleaf and pushes them to GitLab.
+
+    :param config: The program configuration.
+    :param overleaf_projects: A list of all projects to take backups of.
+    """
+    gitlab_obj = GitLab(config.gitlab)
 
     Path("clone_folder").mkdir(exist_ok=True)
 
