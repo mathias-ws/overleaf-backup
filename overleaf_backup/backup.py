@@ -120,7 +120,7 @@ class OverleafRepo:
 
     def __run_git_command(self, command: list) -> bool:
         """
-        Runs arbritarty git commands and returns True if the command was successful.
+        Runs arbitrary git commands and returns True if the command was successful.
 
         :param command: A list of commands to run.
         :return: If the command was successful.
@@ -136,10 +136,7 @@ class OverleafRepo:
                 self.__config.gitlab.access_token.get_secret_value()
             )
 
-        if os.getenv("DOCKER_RUNTIME") == 1:
-            os.environ["GIT_ASKPASS"] = "assets/git_creds.sh"
-        else:
-            os.environ["GIT_ASKPASS"] = "../../assets/git_creds.sh"
+        os.environ["GIT_ASKPASS"] = "assets/git_creds.sh"
 
         result = subprocess.run(
             command,
